@@ -1,0 +1,139 @@
+{
+  "name": "AegisMultitaskPercpetion",
+  "tasks": "ObjectsAndLanes",
+  "location": "/scratch_net/bravo/aungriah/AegisMultitask/",
+  "device": "cuda",
+  "arch": {
+    "type": "AegisMTModel",
+    "backbone_layers": "34",
+    "pretrained_bb": true,
+    "use_aux": true,
+    "griding_num": 100,
+    "cls_num_per_lane": " ",
+    "head_conv": 64,
+    "num_lanes": 4,
+    "num_obj_classes":5,
+    "max_obj_number": 128,
+    "input_width": 800,
+    "input_height": 288
+  },
+    "optimizer": {
+    "type": "Adam",
+    "args": {
+      "lr": 1e-5,
+      "weight_decay": 1e-4,
+      "amsgrad": false
+    }
+  },
+  "lr_scheduler": {
+    "type": "StepLR",
+    "args": {
+      "step_size": 60,
+      "gamma": 0.5
+    }
+  },
+  "trainer": {
+    "stochastic": true,
+    "obj_prob": 0.5,
+    "epochs": 140,
+    "save_period": 25,
+    "save_best": true,
+    "resume": false,
+    "eval_only": false,
+    "path_to_weights": "",
+    "log_dir": " ",
+    "checkpoint_dir": " ",
+    "save_dir": "results",
+    "inference_dir": " ",
+    "tensorboard": true,
+    "early_stop": 30
+  },
+  "datasets": {
+    "obj": "bdd100k",
+    "lanes": "tusimple",
+    "obj_and_lanes": true,
+    "augmentations": {
+      "motionBlur": 0.0,
+      "brightness": 0.0,
+      "shiftScaleRotate": 1.0,
+      "flip": 0.5,
+      "scale": true,
+      "shift": true,
+      "rotate": false
+    }
+  },
+  "loss": {
+    "sim_loss_w": 1.0,
+    "shp_loss_w": 0.0,
+    "loss_multiplier_lanes": 1.0,
+    "loss_multiplier": 1.0
+  },
+  "finetuning_dataloader":{
+    "type": "finetuningDataloader",
+    "dataset": "SelfLabeled",
+    "args": {
+      "data_dir": "/scratch_net/bravo/aungriah/Datasets/finetuning",
+      "batch_size": 4,
+      "shuffle": true,
+      "validation_split": 0.1,
+      "num_workers": 1,
+      "drop_last": true,
+      "griding_num": 100,
+      "cls_num_per_lane": 56,
+      "num_lanes": 4
+    }
+  },
+  "kitti_dataloader": {
+    "type": "KITTIDataLoader",
+    "dataset": "Kitti",
+    "args": {
+      "data_dir": "/scratch_net/bravo/aungriah/Datasets/kitti",
+      "batch_size": 8,
+      "shuffle": true,
+      "validation_split": 0.1,
+      "num_workers": 1,
+      "drop_last": true
+    }
+  },
+    "bdd100k_dataloader": {
+    "type": "BDD110kDataLoader",
+    "dataset": "Bdd100k",
+    "args": {
+      "data_dir": "/scratch_net/bravo/aungriah/Datasets/BDD100k/bdd100k",
+      "batch_size": 32,
+      "shuffle": true,
+      "validation_split": 0.1,
+      "num_workers": 1,
+      "drop_last": true
+    }
+  },
+  "tusimple_dataloader": {
+    "type": "TUSimpleDataLoader",
+    "args": {
+      "dataset": "Tusimple",
+      "data_dir": "/scratch_net/bravo/aungriah/Datasets/TuSimple",
+      "batch_size": 32,
+      "shuffle": true,
+      "validation_split": 0.1,
+      "num_workers": 1,
+      "drop_last": true,
+      "griding_num": 100,
+      "cls_num_per_lane": 56,
+      "num_lanes": 4}
+  },
+  "culane_dataloader": {
+    "type": "CULaneDataLoader",
+    "args": {
+      "dataset": "CULane",
+      "data_dir": "/scratch_net/bravo/aungriah/Datasets/CULane",
+      "batch_size": 8,
+      "shuffle": true,
+      "validation_split": 0.1,
+      "num_workers": 1,
+      "drop_last": true,
+      "griding_num": 200,
+      "cls_num_per_lane": 18,
+      "num_lanes": 4
+    }
+  }
+}
